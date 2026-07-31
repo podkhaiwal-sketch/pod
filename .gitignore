@@ -1,0 +1,14 @@
+.DS_Store
+**/.DS_Store
+node_modules/
+**/node_modules/
+.env
+.env.*
+!.env.example
+uploads/
+**/uploads/
+dist/
+build/
+*.log
+.npm
+.cache/

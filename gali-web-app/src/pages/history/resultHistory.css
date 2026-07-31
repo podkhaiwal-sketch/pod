@@ -1,0 +1,121 @@
+.result-history-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-soft);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.rh-topbar {
+  height: 62px;
+  padding: 0 12px;
+  background: var(--color-primary);
+  color: #fff;
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  gap: 8px;
+}
+
+.rh-topbar h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.rh-back-btn,
+.rh-refresh-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.rh-state {
+  margin: 8px 12px;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.rh-state.error {
+  color: #b42318;
+}
+
+.rh-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 10px 12px 0;
+}
+
+.rh-controls input {
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.rh-controls button {
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 12px;
+}
+
+.rh-table-wrap {
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: auto;
+  margin-top: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rh-table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+}
+
+.rh-table th,
+.rh-table td {
+  border: 1px solid var(--color-border-soft);
+  padding: 8px 10px;
+  white-space: nowrap;
+  font-size: 12px;
+  text-align: center;
+}
+
+.rh-table th {
+  background: var(--color-accent-dark);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .rh-topbar h1 {
+    font-size: 16px;
+  }
+
+  .rh-controls {
+    grid-template-columns: 1fr;
+  }
+}

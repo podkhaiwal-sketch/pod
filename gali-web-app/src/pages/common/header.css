@@ -1,0 +1,120 @@
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  height: 72px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-bright) 100%);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  white-space: nowrap;
+}
+
+.app-header-logo {
+  order: 2;
+  width: 56px;
+  height: 56px;
+  max-width: 100%;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.app-header-icon-btn,
+.app-header-bell-btn {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.app-header-icon-btn {
+  order: 1;
+}
+
+.app-header-bell-btn {
+  order: 4;
+}
+
+.app-header-balance-card {
+  order: 3;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  width: auto;
+  min-width: 132px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(10, 10, 10, 0.12);
+  gap: 8px;
+  padding: 6px 8px;
+}
+
+.app-header-coin {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-soft);
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.app-header-balance-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.app-header-balance-text small {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.app-header-balance-text strong {
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    height: 64px;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .app-header-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .app-header-balance-card {
+    min-width: 110px;
+    padding: 5px 7px;
+  }
+
+  .app-header-icon-btn,
+  .app-header-bell-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .app-header-balance-text strong {
+    font-size: 12px;
+  }
+}

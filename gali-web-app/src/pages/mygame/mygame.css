@@ -1,0 +1,406 @@
+.my-game-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(100% 55% at 50% 0%, rgba(240, 176, 0, 0.12) 0%, transparent 52%),
+    linear-gradient(180deg, var(--color-soft) 0%, var(--color-soft-alt) 100%);
+  padding-top: 80px;
+  padding-bottom: calc(84px + env(safe-area-inset-bottom));
+}
+
+.my-game-banner {
+  margin: 0 12px 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--color-accent-dark) 0%, var(--color-accent-strip) 100%);
+  color: var(--color-white);
+  box-shadow: 0 8px 24px rgba(69, 10, 10, 0.14);
+  text-align: center;
+}
+
+.my-game-banner-title {
+  margin: 0;
+  font-size: clamp(22px, 5.5vw, 28px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.my-game-banner-sub {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.my-game-content {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 12px 20px;
+}
+
+/* Toolbar: market + reload */
+.my-game-toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 14px;
+}
+
+.my-game-select-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.my-game-select-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.my-game-select {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 50px;
+  padding: 0 14px;
+  border: 2px solid var(--color-border-soft);
+  border-radius: 12px;
+  background: var(--color-white);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.my-game-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(240, 176, 0, 0.22);
+}
+
+.my-game-reload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 50px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-mid) 100%);
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(240, 176, 0, 0.3);
+  white-space: nowrap;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.my-game-reload:active {
+  transform: scale(0.98);
+}
+
+.my-game-reload-icon {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Tabs + notes card */
+.my-game-tabs-card {
+  border: 1px solid var(--color-border-soft);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  background: var(--color-white);
+  box-shadow: 0 6px 20px rgba(69, 10, 10, 0.06);
+}
+
+.my-game-segmented.history-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 6px;
+  background: var(--color-card-inner);
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.my-game-segmented.history-tabs button {
+  border: none;
+  min-height: 46px;
+  border-radius: 11px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-text-muted);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* index.css .history-tabs .active — reinforce pill */
+.my-game-page .my-game-segmented.history-tabs button.active {
+  background: var(--color-primary) !important;
+  color: var(--color-white) !important;
+  box-shadow: 0 4px 12px rgba(240, 176, 0, 0.35);
+}
+
+.my-game-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.my-game-note {
+  padding: 12px 12px 14px;
+  border-right: 1px solid var(--color-border-soft);
+  background: var(--color-card-inner);
+}
+
+.my-game-note:last-child {
+  border-right: none;
+}
+
+.my-game-note-badge {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(240, 176, 0, 0.2);
+  color: var(--color-text);
+}
+
+.my-game-note-badge--declared {
+  background: rgba(159, 18, 57, 0.12);
+  color: var(--color-accent-dark);
+}
+
+.my-game-note p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* Loading */
+.my-game-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.my-game-skeleton {
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    var(--color-soft-alt) 0%,
+    #fff 50%,
+    var(--color-soft-alt) 100%
+  );
+  background-size: 200% 100%;
+  animation: my-game-shimmer 1.15s ease-in-out infinite;
+}
+
+@keyframes my-game-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.my-game-skeleton-row {
+  height: 22px;
+}
+
+.my-game-skeleton-table {
+  height: 160px;
+}
+
+.my-game-state {
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.my-game-state--error {
+  color: var(--color-text);
+  background: rgba(185, 28, 28, 0.1);
+  border: 1px solid rgba(185, 28, 28, 0.22);
+  border-radius: 12px;
+}
+
+/* Table card */
+.my-game-table-card {
+  border-radius: 16px;
+  border: 1px solid var(--color-border-soft);
+  background: var(--color-white);
+  overflow: hidden;
+  box-shadow: 0 6px 22px rgba(69, 10, 10, 0.06);
+}
+
+.my-game-table-heading {
+  margin: 0;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--color-primary-mid) 0%, var(--color-primary) 100%);
+  color: var(--color-on-primary);
+}
+
+.my-game-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.my-game-table-wrap table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.my-game-table-wrap th,
+.my-game-table-wrap td {
+  border: 1px solid var(--color-border-soft);
+  padding: 10px 12px;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.my-game-table-wrap thead th {
+  background: linear-gradient(180deg, var(--color-soft-alt) 0%, var(--color-soft) 100%);
+  color: var(--color-text);
+  font-weight: 800;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.my-game-table-wrap tbody tr:nth-child(even) td {
+  background: rgba(255, 251, 235, 0.7);
+}
+
+.my-game-table-wrap tbody tr:hover td {
+  background: rgba(240, 176, 0, 0.07);
+}
+
+.my-game-table-wrap tbody td {
+  background: var(--color-white);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.my-game-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.my-game-points {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: var(--color-accent-dark);
+}
+
+.my-game-empty {
+  text-align: center !important;
+  padding: 28px 16px !important;
+  white-space: normal !important;
+  color: var(--color-text-muted) !important;
+  font-weight: 600 !important;
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 70px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--color-primary);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nav-item {
+  border: none;
+  color: #d9d9d9;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.nav-item.active {
+  color: #111;
+  background: #f7f7f7;
+  border-radius: 8px;
+  margin: 4px;
+}
+
+@media (max-width: 768px) {
+  .my-game-toolbar {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .my-game-reload {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .my-game-notes {
+    grid-template-columns: 1fr;
+  }
+
+  .my-game-note {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .my-game-note:last-child {
+    border-bottom: none;
+  }
+
+  .my-game-note p {
+    font-size: 11px;
+  }
+
+  .my-game-segmented.history-tabs button {
+    font-size: 13px;
+    min-height: 42px;
+  }
+
+  .my-game-table-wrap th,
+  .my-game-table-wrap td {
+    font-size: 12px;
+    padding: 8px 9px;
+  }
+
+  .my-game-table-heading {
+    font-size: 12px;
+    padding: 12px 14px;
+  }
+}
