@@ -1,6 +1,12 @@
 module.exports = {
-  apps : [{
-    name   : "app1",
-    script : "./server.js"
-  }]
-}
+  apps: [
+    {
+      name: "gali-web-app-api",
+      script: "./server.js",
+      env_file: ".env",
+      env: {
+        NODE_ENV: "production",
+      },
+    },
+  ],
+};

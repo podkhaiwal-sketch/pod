@@ -172,7 +172,7 @@ const coerceImbSyncPendingBody = (body) => {
 const IMB_BASE_URL = process.env.IMB_BASE_URL || "https://secure-stage.imb.org.in";
 const IMB_CREATE_ORDER_PATH = "/api/create-order";
 const IMB_CHECK_ORDER_PATH = "/api/check-order-status";
-const IMB_USER_TOKEN = "7a7163ad52cc616002758a1e408a4a3b";
+const IMB_USER_TOKEN = process.env.IMB_USER_TOKEN || "";
 
 const parseMonthFilter = (rawMonth) => {
   const s = String(rawMonth || "").trim();
