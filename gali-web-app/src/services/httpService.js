@@ -32,13 +32,24 @@ function forceLogoutToLogin() {
 }
 
 export async function postJson(endpoint, payload) {
-  const response = await fetch(`${APP_CONFIG.baseUrl}${endpoint}`, {
+  const url = `${APP_CONFIG.baseUrl}${endpoint}`
+  const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   })
 
-  const data = await response.json()
+  const raw = await response.text()
+  let data
+  try {
+    data = raw ? JSON.parse(raw) : {}
+  } catch {
+    const preview = raw.trim().slice(0, 80)
+    throw new Error(
+      `API returned non-JSON (${response.status}) from ${url}. ` +
+        `Check VITE_API_BASE_URL and that the API server is running. Preview: ${preview}`
+    )
+  }
 
   if (shouldForceLogout(data)) {
     forceLogoutToLogin()
