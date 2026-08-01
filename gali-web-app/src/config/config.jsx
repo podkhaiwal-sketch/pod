@@ -3,8 +3,18 @@ function normalizeUserApiBaseUrl(url) {
   const fallback = 'https://gali-web-app-api.onrender.com/api/users'
   let base = String(url ?? fallback).trim().replace(/\/+$/, '')
   if (!base) base = fallback
-  if (!base.endsWith('/api/users')) {
-    base = `${base}/api/users`.replace(/([^:]\/)\/+/g, '$1')
+
+  // Fix common misconfig: .../users/api/users → .../api/users
+  base = base.replace(/\/users\/api\/users$/i, '/api/users')
+
+  try {
+    const parsed = new URL(base)
+    // Always force origin + /api/users (ignore extra path segments)
+    base = `${parsed.origin}/api/users`
+  } catch {
+    if (!base.endsWith('/api/users')) {
+      base = `${base}/api/users`.replace(/([^:]\/)\/+/g, '$1')
+    }
   }
   return base
 }
