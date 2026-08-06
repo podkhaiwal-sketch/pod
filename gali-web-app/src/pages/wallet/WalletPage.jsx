@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { APP_CONFIG } from '../../config/config'
 import { ROUTE_PATHS } from '../routes'
-import { getUserCredit } from '../../services/homeService'
+import { getHelpNumber, getUserCredit, getUserProfile } from '../../services/homeService'
 import { getSession } from '../../services/sessionService'
 import {
   deductWithdrawUpiWeb,
@@ -194,97 +194,62 @@ function WalletPage({ navigate }) {
       return
     }
 
-    const selectedGateway = gatewayFromApi || gatewayKey || 'utr'
-    if (selectedGateway === 'imb') {
-      setAddingPoints(true)
+    setAddingPoints(true)
+    try {
+      let profile = null
+      let help = null
       try {
-        const generatedOrderId = `${String(session?.userId || '')}${Date.now()}`
-        const payload = {
-          user_id: String(session?.userId || ''),
-          app_id: APP_CONFIG.appId,
-          amount: numericAmount,
-          customer_mobile: String(session?.mobileNum || ''),
-          order_id: generatedOrderId,
-          redirect_url:
-            typeof window !== 'undefined' ? `${window.location.origin}${ROUTE_PATHS.wallet}` : '',
-          remark1: 'your-customer@gmail.com',
-          remark2: 'Hello',
-          webhook_url: `${APP_CONFIG.baseUrl.replace('/api/users', '')}/imb-api/api/webhook`,
-          devName: 'WEB',
-          devType: 'web',
-          devId: 'BROWSER-1',
-        }
+        ;[profile, help] = await Promise.all([
+          getUserProfile(session.userId),
+          getHelpNumber(),
+        ])
+      } catch {
+        // Fall back to session values if profile/help APIs fail.
+      }
 
-        const response = await fetch(`${APP_CONFIG.baseUrl}/imb-create-order`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        const data = await response.json()
+      const adminWhatsApp = String(
+        profile?.genral_setting_whatsapp ||
+          help?.help_line_number ||
+          help?.whatsapp ||
+          ''
+      ).replace(/[^\d]/g, '')
 
-        if (!response.ok || String(data?.success) !== '1') {
-          throw new Error(data?.message || 'Unable to create payment order.')
-        }
-
-        const finalOrderId = String(data?.order_id || generatedOrderId)
-        setLastOrderId(finalOrderId)
-        if (typeof window !== 'undefined') {
-          window.localStorage.setItem(IMB_PENDING_ORDER_KEY, finalOrderId)
-        }
-
-        const resultData = data?.result || data?.data || {}
-        const paymentUrl =
-          resultData?.payment_url ||
-          data?.payment_url ||
-          resultData?.payment_link ||
-          data?.payment_link ||
-          data?.url
-        const paytmLink = resultData?.paytm_link || data?.paytm_link || ''
-        const bhimLink = resultData?.bhim_link || data?.bhim_link || ''
-        const phonepeLink = resultData?.phonepe_link || data?.phonepe_link || bhimLink
-
-        setPaymentLinks({
-          phonepe: String(phonepeLink || ''),
-          paytm: String(paytmLink || ''),
-          bhim: String(bhimLink || ''),
-          browser: String(paymentUrl || ''),
-        })
-
-        if (paytmLink || bhimLink || phonepeLink || paymentUrl) {
-          // setDialog({
-          //   open: true,
-          //   type: 'success',
-          //   title: 'Payment Options',
-          //   message: 'Select app and pay now.',
-          // })
-          return
-        }
-
-        setDialog({
-          open: true,
-          type: 'success',
-          title: 'Success',
-          message: data?.message || 'Order created successfully.',
-        })
-      } catch (apiError) {
+      if (!adminWhatsApp) {
         setDialog({
           open: true,
           type: 'error',
-          title: 'Error',
-          message: apiError instanceof Error ? apiError.message : 'Unable to create IMB order.',
+          title: 'WhatsApp Unavailable',
+          message: 'Admin WhatsApp number not found.',
         })
-      } finally {
-        setAddingPoints(false)
+        return
       }
 
-    } else {
-      const name = encodeURIComponent(session?.name || 'Test')
-      const userid = encodeURIComponent(String(session?.userId || ''))
-      const contact = encodeURIComponent(session?.mobileNum || '')
-      const finalAmount = encodeURIComponent(String(amount))
+      const userName = profile?.name || session?.name || 'User'
+      const userPhone = profile?.mob || session?.mobileNum || '--'
+      const userEmail = profile?.email || session?.email || '--'
+      const userId = session?.userId || '--'
 
-      const url = `${APP_CONFIG.paymentGatewayUrl}?name=${name}&userid=${userid}&amount=${finalAmount}&contact=${contact}&getaway=${selectedGateway}`
-      window.location.href = url
+      const message = [
+        'Add Points Request',
+        '',
+        `Amount: ₹${numericAmount}`,
+        `Name: ${userName}`,
+        `Phone: ${userPhone}`,
+        `Email: ${userEmail}`,
+        `User ID: ${userId}`,
+      ].join('\n')
+
+      const waUrl = `https://wa.me/${adminWhatsApp}?text=${encodeURIComponent(message)}`
+      window.open(waUrl, '_blank', 'noopener,noreferrer')
+    } catch (apiError) {
+      setDialog({
+        open: true,
+        type: 'error',
+        title: 'Error',
+        message: apiError instanceof Error ? apiError.message : 'Unable to open WhatsApp.',
+      })
+    } finally {
+      setAddingPoints(false)
     }
   }
 
@@ -491,6 +456,7 @@ function WalletPage({ navigate }) {
         credit={credit}
         isMenuOpen={drawerOpen}
         onMenu={() => setDrawerOpen((prev) => !prev)}
+        onBalanceClick={() => navigate(ROUTE_PATHS.wallet)}
         onNotification={() => navigate(ROUTE_PATHS.notification)}
       />
 
@@ -614,7 +580,7 @@ function WalletPage({ navigate }) {
                   {maxDeposit > 0 ? ` / Max ${maxDeposit}` : ''}
                 </div>
               ) : null}
-              <p className="wallet-hint">Complete payment in your app to add points.</p>
+              <p className="wallet-hint">WhatsApp will open with your amount and account details for the admin.</p>
             </>
           ) : (
             <>

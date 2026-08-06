@@ -13,6 +13,8 @@ module.exports = (app) => {
   const chatStore = require("../controllers/chatStore.controller.js");
   const batDelete = require("../controllers/batDelete.controller.js");
   const userWithdrawDetails = require("../controllers/userWithdrawDetails.controller.js");
+  const records = require("../controllers/records.controller.js");
+  const roulette = require("../controllers/roulette.controller.js");
 
   var router = require("express").Router();
 
@@ -81,6 +83,16 @@ module.exports = (app) => {
   router.post("/bonus-report-list", bethistory.bonus_report_list);
   router.post("/bonus-report-redem", bethistory.bonus_report_redem);
   router.post("/manage-commission", users.manageCommission);
+  router.post("/my-bidding", records.getMyBidding);
+  router.post("/old-records", records.getOldRecords);
+  router.post("/my-wins", records.getMyWins);
+  router.post("/statement", records.getStatement);
+
+  router.get("/roulette-config", roulette.getConfig);
+  router.post("/roulette-config", roulette.getConfig);
+  router.get("/roulette-recent", roulette.getRecent);
+  router.post("/roulette-recent", roulette.getRecent);
+  router.post("/roulette-my-bets", roulette.getMyBets);
 
   // router.post("/web-Audio", chatStore.web_Audio);
 

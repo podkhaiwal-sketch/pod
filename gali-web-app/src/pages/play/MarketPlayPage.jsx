@@ -59,7 +59,7 @@ function mapCrossingToBetList(rows) {
 function MarketPlayPage({ navigate }) {
   const [session] = useState(() => getSession())
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState('jodi')
+  const [activeTab, setActiveTab] = useState('jodiHarraf')
   const [credit, setCredit] = useState(0)
   const [dialog, setDialog] = useState({ open: false, type: 'success', title: '', message: '' })
   const [submitting, setSubmitting] = useState(false)
@@ -71,10 +71,10 @@ function MarketPlayPage({ navigate }) {
   const [crossSecond, setCrossSecond] = useState('')
   const [crossPoints, setCrossPoints] = useState('')
   const [crossRows, setCrossRows] = useState([])
-  const [copyNumber, setCopyNumber] = useState('')
-  const [copyAmount, setCopyAmount] = useState('')
-  const [withPlati, setWithPlati] = useState(true)
-  const [copyRows, setCopyRows] = useState([])
+  const [rangeStart, setRangeStart] = useState('')
+  const [rangeEnd, setRangeEnd] = useState('')
+  const [rangePoints, setRangePoints] = useState('')
+  const [rangeRows, setRangeRows] = useState([])
 
   const [market] = useState(() => {
     try {
@@ -101,11 +101,16 @@ function MarketPlayPage({ navigate }) {
   }, [market?.id, navigate, session?.userId])
 
   const currentBetList = useMemo(() => {
-    if (activeTab === 'jodi') return mapJodiToBetList(jodiValues)
+    if (activeTab === 'jodiHarraf') {
+      return [
+        ...mapJodiToBetList(jodiValues),
+        ...mapHarrafToBetList(andarHarraf, baharHarraf),
+      ]
+    }
     if (activeTab === 'harraf') return mapHarrafToBetList(andarHarraf, baharHarraf)
     if (activeTab === 'crossing') return mapCrossingToBetList(crossRows)
-    return mapCrossingToBetList(copyRows)
-  }, [activeTab, andarHarraf, baharHarraf, copyRows, crossRows, jodiValues])
+    return mapCrossingToBetList(rangeRows)
+  }, [activeTab, andarHarraf, baharHarraf, crossRows, jodiValues, rangeRows])
 
   const totalAmount = useMemo(
     () => currentBetList.reduce((sum, row) => sum + Number(row.betamount || 0), 0),
@@ -144,18 +149,25 @@ function MarketPlayPage({ navigate }) {
     setCrossPoints('')
   }
 
-  const addCopyPasteRows = () => {
-    if (!copyNumber || !copyAmount) return
-    const amount = Number(copyAmount)
-    if (amount <= 0) return
+  const addRangeRows = () => {
+    if (!rangeStart || !rangeEnd || !rangePoints) return
+    const start = Number(rangeStart)
+    const end = Number(rangeEnd)
+    const amount = Number(rangePoints)
+    if (Number.isNaN(start) || Number.isNaN(end) || amount <= 0 || start > end) return
 
-    const base = copyNumber.slice(0, 2)
-    if (base.length < 2) return
-    const rows = [{ number: base, amount }]
-    if (withPlati) rows.push({ number: `${base[1]}${base[0]}`, amount })
-    setCopyRows((prev) => [...prev, ...rows])
-    setCopyNumber('')
-    setCopyAmount('')
+    const nextRows = []
+    for (let num = start; num <= end; num += 1) {
+      nextRows.push({
+        number: String(num).padStart(2, '0'),
+        amount,
+      })
+    }
+
+    setRangeRows((prev) => [...prev, ...nextRows])
+    setRangeStart('')
+    setRangeEnd('')
+    setRangePoints('')
   }
 
   const removeRow = (index, kind) => {
@@ -163,7 +175,7 @@ function MarketPlayPage({ navigate }) {
       setCrossRows((prev) => prev.filter((_, idx) => idx !== index))
       return
     }
-    setCopyRows((prev) => prev.filter((_, idx) => idx !== index))
+    setRangeRows((prev) => prev.filter((_, idx) => idx !== index))
   }
 
   const placeCurrentBet = async () => {
@@ -192,13 +204,17 @@ function MarketPlayPage({ navigate }) {
         message: result.message || 'Game Played Successfully.',
       })
 
-      if (activeTab === 'jodi') setJodiValues({})
+      if (activeTab === 'jodiHarraf') {
+        setJodiValues({})
+        setAndarHarraf({})
+        setBaharHarraf({})
+      }
       if (activeTab === 'harraf') {
         setAndarHarraf({})
         setBaharHarraf({})
       }
       if (activeTab === 'crossing') setCrossRows([])
-      if (activeTab === 'copyPaste') setCopyRows([])
+      if (activeTab === 'numberRange') setRangeRows([])
     } catch (error) {
       setDialog({
         open: true,
@@ -219,6 +235,7 @@ function MarketPlayPage({ navigate }) {
         credit={credit}
         isMenuOpen={drawerOpen}
         onMenu={() => setDrawerOpen((prev) => !prev)}
+        onBalanceClick={() => navigate(ROUTE_PATHS.wallet)}
         onNotification={() => navigate(ROUTE_PATHS.notification)}
       />
 
@@ -230,36 +247,41 @@ function MarketPlayPage({ navigate }) {
       </div>
 
       <div className="tab-row">
-        <button className={activeTab === 'jodi' ? 'active' : ''} onClick={() => setActiveTab('jodi')}>
-          Jodi
+        <button
+          className={activeTab === 'jodiHarraf' ? 'active' : ''}
+          onClick={() => setActiveTab('jodiHarraf')}
+        >
+          Jodi/Harraf
         </button>
-        <button className={activeTab === 'harraf' ? 'active' : ''} onClick={() => setActiveTab('harraf')}>
-          Harraf
-        </button>
-        {/* <button className={activeTab === 'crossing' ? 'active' : ''} onClick={() => setActiveTab('crossing')}>
+        <button
+          className={activeTab === 'crossing' ? 'active' : ''}
+          onClick={() => setActiveTab('crossing')}
+        >
           Crossing
         </button>
-        <button className={activeTab === 'copyPaste' ? 'active' : ''} onClick={() => setActiveTab('copyPaste')}>
-          Copy Paste
-        </button> */}
+        <button
+          className={activeTab === 'numberRange' ? 'active' : ''}
+          onClick={() => setActiveTab('numberRange')}
+        >
+          Number to Number
+        </button>
       </div>
 
       <main className="market-content">
         <p className="remaining">Points Remaining : {credit}</p>
 
-        {activeTab === 'jodi' ? (
-          <div className="jodi-grid">
-            {jodiNumbers.map((num) => (
-              <div key={num} className="cell-card">
-                <div className={`cell-head ${Number(jodiValues[num] || 0) > 0 ? 'selected' : ''}`}>{num}</div>
-                <input value={jodiValues[num] || ''} onChange={(e) => setJodiAmount(num, e.target.value)} />
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        {activeTab === 'harraf' ? (
+        {activeTab === 'jodiHarraf' ? (
           <>
+            <h3 className="section-title">Jodi</h3>
+            <div className="jodi-grid">
+              {jodiNumbers.map((num) => (
+                <div key={num} className="cell-card">
+                  <div className={`cell-head ${Number(jodiValues[num] || 0) > 0 ? 'selected' : ''}`}>{num}</div>
+                  <input value={jodiValues[num] || ''} onChange={(e) => setJodiAmount(num, e.target.value)} />
+                </div>
+              ))}
+            </div>
+
             <h3 className="section-title">Andar Haruf</h3>
             <div className="digit-grid">
               {digitNumbers.map((num) => (
@@ -327,21 +349,21 @@ function MarketPlayPage({ navigate }) {
           </>
         ) : null}
 
-        {activeTab === 'copyPaste' ? (
+        {activeTab === 'numberRange' ? (
           <>
-            <label>Number</label>
-            <input value={copyNumber} onChange={(e) => setCopyNumber(e.target.value.replace(/[^\d]/g, ''))} />
-            <div className="radio-row">
-              <label>
-                <input type="radio" checked={withPlati} onChange={() => setWithPlati(true)} /> With Plati
-              </label>
-              <label>
-                <input type="radio" checked={!withPlati} onChange={() => setWithPlati(false)} /> Without Plati
-              </label>
+            <div className="row2">
+              <div>
+                <label>Start Number</label>
+                <input value={rangeStart} onChange={(e) => setRangeStart(e.target.value.replace(/[^\d]/g, ''))} />
+              </div>
+              <div>
+                <label>End Number</label>
+                <input value={rangeEnd} onChange={(e) => setRangeEnd(e.target.value.replace(/[^\d]/g, ''))} />
+              </div>
             </div>
-            <label>Amount</label>
-            <input value={copyAmount} onChange={(e) => setCopyAmount(e.target.value.replace(/[^\d]/g, ''))} />
-            <button className="add-btn" onClick={addCopyPasteRows}>
+            <label>Points</label>
+            <input value={rangePoints} onChange={(e) => setRangePoints(e.target.value.replace(/[^\d]/g, ''))} />
+            <button className="add-btn" onClick={addRangeRows}>
               Add
             </button>
 
@@ -355,13 +377,13 @@ function MarketPlayPage({ navigate }) {
                 </tr>
               </thead>
               <tbody>
-                {copyRows.map((row, index) => (
+                {rangeRows.map((row, index) => (
                   <tr key={`${row.number}-${index}`}>
-                    <td>Jodi</td>
+                    <td>Number to Number</td>
                     <td>{row.number}</td>
                     <td>{row.amount}</td>
                     <td>
-                      <button className="delete-btn" onClick={() => removeRow(index, 'copyPaste')}>
+                      <button className="delete-btn" onClick={() => removeRow(index, 'range')}>
                         🗑
                       </button>
                     </td>
@@ -377,7 +399,7 @@ function MarketPlayPage({ navigate }) {
       <footer className="bet-footer">
         <span>₹ {totalAmount}/-</span>
         <button onClick={placeCurrentBet} disabled={submitting}>
-          {submitting ? 'Please wait...' : activeTab === 'jodi' ? 'Play Bet' : 'Place Bet'}
+          {submitting ? 'Please wait...' : activeTab === 'jodiHarraf' ? 'Play Bet' : 'Place Bet'}
         </button>
       </footer>
 

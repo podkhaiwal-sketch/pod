@@ -1,10 +1,18 @@
+const fs = require("fs");
+const path = require("path");
+
+// Load local .env when present (plain `nodemon` / `node server.js`).
+// On Render, env vars come from the dashboard and .env is absent.
+const envPath = path.join(__dirname, ".env");
+if (fs.existsSync(envPath) && typeof process.loadEnvFile === "function") {
+  process.loadEnvFile(envPath);
+}
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
-const fs = require("fs");
-const path = require("path");
 const moment = require("moment");
 
 const mongoose = require("mongoose");
@@ -22,8 +30,13 @@ AWS.config.update({
   region: process.env.AWS_REGION || "us-west-2",
 });
 
-const http = require("https").Server(app);
-const io = require("socket.io")(http);
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server, {
+  cors: { origin: "*", methods: ["GET", "POST"] },
+});
+const { rouletteGame } = require("./app/services/rouletteGame.service.js");
 
 //mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 dbconnection().then(() => {
@@ -656,7 +669,7 @@ db.once("open", () => {
   });
 
   io.on("connection", (socket) => {
-    console.log("A user connected");
+    console.log("A user connected", socket.id);
   });
 
   app.use(cors());
@@ -695,8 +708,11 @@ db.once("open", () => {
   const PORT = process.env.PORT || 30000;
   require("./app/routes/user.routes.js")(app);
   //require("./app/routes/company.routes.js")(app);
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
+    rouletteGame.start(io).catch((err) => {
+      console.error("[roulette] failed to start", err);
+    });
   });
 }).on("disconnected", () => {
   console.log("MongoDB connection disconnected");

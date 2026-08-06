@@ -61,6 +61,18 @@
   box-shadow: 0 4px 14px rgba(10, 10, 10, 0.12);
   gap: 8px;
   padding: 6px 8px;
+  border: none;
+  font: inherit;
+  color: inherit;
+  cursor: default;
+}
+
+.app-header-balance-card.clickable {
+  cursor: pointer;
+}
+
+.app-header-balance-card.clickable:active {
+  transform: scale(0.99);
 }
 
 .app-header-coin {

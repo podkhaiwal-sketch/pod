@@ -8,6 +8,10 @@ import './sideDrawer.css'
 
 const menuItems = [
   { key: 'profile', label: 'Profile', icon: 'person' },
+  { key: 'myBidding', label: 'My Bidding', icon: 'history' },
+  { key: 'oldRecords', label: 'Old Records', icon: 'description' },
+  { key: 'myWins', label: 'My wins', icon: 'sports_score' },
+  { key: 'statement', label: 'Statement', icon: 'account_balance_wallet' },
   { key: 'commission', label: 'App Commission', icon: 'account_balance_wallet' },
   { key: 'history', label: 'Game History', icon: 'history' },
   { key: 'resultHistory', label: 'Result History', icon: 'sports_score' },
@@ -76,6 +80,30 @@ function SideDrawer({
     if (itemKey === 'commission') {
       onClose()
       navigate(ROUTE_PATHS.commission)
+      return
+    }
+
+    if (itemKey === 'myBidding') {
+      onClose()
+      navigate(ROUTE_PATHS.myBidding)
+      return
+    }
+
+    if (itemKey === 'oldRecords') {
+      onClose()
+      navigate(ROUTE_PATHS.oldRecords)
+      return
+    }
+
+    if (itemKey === 'myWins') {
+      onClose()
+      navigate(ROUTE_PATHS.myWins)
+      return
+    }
+
+    if (itemKey === 'statement') {
+      onClose()
+      navigate(ROUTE_PATHS.statement)
       return
     }
 

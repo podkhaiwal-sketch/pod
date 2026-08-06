@@ -53,6 +53,7 @@ function TermsPage({ navigate }) {
         credit={credit}
         isMenuOpen={drawerOpen}
         onMenu={() => setDrawerOpen((prev) => !prev)}
+        onBalanceClick={() => navigate(ROUTE_PATHS.wallet)}
         onNotification={() => navigate(ROUTE_PATHS.notification)}
       />
 

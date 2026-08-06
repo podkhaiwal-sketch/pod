@@ -43,6 +43,10 @@ export const API_ENDPOINTS = {
   manageCommission: '/manage-commission',
   userRefferList: '/user-refferlist',
   pendingBetHistory: '/pending-bet-history',
+  myBidding: '/my-bidding',
+  oldRecords: '/old-records',
+  myWins: '/my-wins',
+  statement: '/statement',
   userCredit: '/user-credit',
   userProfileUpdate: '/user-profile-update',
   helpNumber: '/POM_help_number',
@@ -50,4 +54,7 @@ export const API_ENDPOINTS = {
   withdrawHistory: '/withdrawl-history',
   resultLinks: '/result-links',
   allGameResultsByMonth: '/all-game-results-by-month',
+  rouletteConfig: '/roulette-config',
+  rouletteRecent: '/roulette-recent',
+  rouletteMyBets: '/roulette-my-bets',
 }

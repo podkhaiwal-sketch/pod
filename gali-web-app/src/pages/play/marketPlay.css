@@ -115,7 +115,7 @@
 
 .tab-row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   background: var(--color-primary);
 }
 
@@ -136,6 +136,8 @@
 
 .market-content {
   padding: 8px;
+  padding-bottom: 14px;
+  overflow-y: auto;
 }
 
 .remaining {
@@ -157,7 +159,7 @@
 }
 
 .section-title {
-  margin: 10px 0;
+  margin: 14px 0 10px;
   font-size: 20px;
 }
 
@@ -316,7 +318,7 @@
 
   .tab-row button {
     font-size: 12px;
-    height: 40px;
+    height: 42px;
   }
 
   .remaining {

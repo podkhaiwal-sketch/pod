@@ -340,7 +340,7 @@
   bottom: 0;
   height: 70px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(var(--bottom-nav-count, 4), 1fr);
   background: var(--color-primary);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
@@ -401,6 +401,94 @@
 
   .my-game-table-heading {
     font-size: 12px;
+    padding: 12px 14px;
+  }
+}
+
+/* Market list + Play Now (My Game) */
+.my-game-market-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0 0 18px;
+}
+
+.my-game-market-card {
+  background: #190a3f;
+  border-radius: 16px;
+  padding: 14px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.my-game-market-info {
+  color: #ffffff;
+  min-width: 0;
+}
+
+.my-game-market-name {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.my-game-market-time {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.96;
+}
+
+.my-game-play-now {
+  border: none;
+  background: #16a34a;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 14px 18px;
+  cursor: pointer;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  min-width: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 24px rgba(22, 163, 74, 0.25);
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.my-game-play-now:active {
+  transform: scale(0.98);
+}
+
+.my-game-play-now.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.my-game-play-now-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 430px) {
+  .my-game-market-card {
+    padding: 12px 12px;
+  }
+
+  .my-game-market-name {
+    font-size: 18px;
+  }
+
+  .my-game-play-now {
+    min-width: 120px;
     padding: 12px 14px;
   }
 }

@@ -2,7 +2,16 @@ import logo from '../../assets/hero.png'
 import AppIcon from './AppIcon'
 import './header.css'
 
-function Header({ className = '', credit = 0, onMenu, onNotification, isMenuOpen = false }) {
+function Header({
+  className = '',
+  credit = 0,
+  onMenu,
+  onNotification,
+  isMenuOpen = false,
+  onBalanceClick,
+}) {
+  const canNavigateToWallet = typeof onBalanceClick === 'function'
+
     return (
         <header className={`app-header ${className}`.trim()}>
 
@@ -12,13 +21,18 @@ function Header({ className = '', credit = 0, onMenu, onNotification, isMenuOpen
 
             <img src={logo} alt="POK" className="app-header-logo" /> 
 
-            <div className="app-header-balance-card">
+            <button
+              type="button"
+              className={`app-header-balance-card ${canNavigateToWallet ? 'clickable' : ''}`}
+              onClick={onBalanceClick}
+              aria-label={canNavigateToWallet ? 'Open wallet' : 'Balance'}
+            >
                 <div className="app-header-coin">₹</div>
                 <div className="app-header-balance-text">
                     <small>Balance</small>
                     <strong>{credit}/-</strong>
                 </div>
-            </div>
+            </button>
             <button type="button" className="app-header-bell-btn" onClick={onNotification}>
                 <AppIcon name="notifications" />
             </button>

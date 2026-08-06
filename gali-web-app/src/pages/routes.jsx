@@ -15,6 +15,11 @@ import TermsPage from './terms/TermsPage'
 import ReferPage from './refer/ReferPage'
 import ReferSharePage from './refer/ReferSharePage'
 import NotificationPage from './notification/NotificationPage'
+import MyBiddingPage from './records/MyBiddingPage'
+import OldRecordsPage from './records/OldRecordsPage'
+import MyWinsPage from './records/MyWinsPage'
+import StatementPage from './records/StatementPage'
+import RoulettePage from './roulette/RoulettePage'
 import { getSession } from '../services/sessionService'
 
 export const ROUTE_PATHS = {
@@ -26,6 +31,10 @@ export const ROUTE_PATHS = {
   wallet: '/wallet',
   addPoint: '/add-point',
   myGame: '/my-game',
+  myBidding: '/my-bidding',
+  oldRecords: '/old-records',
+  myWins: '/my-wins',
+  statement: '/statement',
   profile: '/profile',
   commission: '/manage-commission',
   history: '/history',
@@ -34,6 +43,7 @@ export const ROUTE_PATHS = {
   refer: '/refer-list',
   referShare: '/refer-earn',
   notification: '/notification',
+  roulette: '/roulette',
 }
 
 const routeMap = {
@@ -45,6 +55,10 @@ const routeMap = {
   [ROUTE_PATHS.wallet]: WalletPage,
   [ROUTE_PATHS.addPoint]: AddPointPage,
   [ROUTE_PATHS.myGame]: MyGamePage,
+  [ROUTE_PATHS.myBidding]: MyBiddingPage,
+  [ROUTE_PATHS.oldRecords]: OldRecordsPage,
+  [ROUTE_PATHS.myWins]: MyWinsPage,
+  [ROUTE_PATHS.statement]: StatementPage,
   [ROUTE_PATHS.profile]: ProfilePage,
   [ROUTE_PATHS.commission]: CommissionPage,
   [ROUTE_PATHS.history]: HistoryPage,
@@ -53,6 +67,7 @@ const routeMap = {
   [ROUTE_PATHS.refer]: ReferPage,
   [ROUTE_PATHS.referShare]: ReferSharePage,
   [ROUTE_PATHS.notification]: NotificationPage,
+  [ROUTE_PATHS.roulette]: RoulettePage,
 }
 
 const normalizePath = (path) => {
@@ -73,13 +88,18 @@ export function getRouteElement(pathname, navigate) {
       normalizedPath === ROUTE_PATHS.wallet ||
       normalizedPath === ROUTE_PATHS.addPoint ||
       normalizedPath === ROUTE_PATHS.myGame ||
+      normalizedPath === ROUTE_PATHS.myBidding ||
+      normalizedPath === ROUTE_PATHS.oldRecords ||
+      normalizedPath === ROUTE_PATHS.myWins ||
+      normalizedPath === ROUTE_PATHS.statement ||
       normalizedPath === ROUTE_PATHS.profile ||
       normalizedPath === ROUTE_PATHS.commission ||
       normalizedPath === ROUTE_PATHS.history ||
       normalizedPath === ROUTE_PATHS.terms ||
       normalizedPath === ROUTE_PATHS.refer ||
       normalizedPath === ROUTE_PATHS.referShare ||
-      normalizedPath === ROUTE_PATHS.notification)
+      normalizedPath === ROUTE_PATHS.notification ||
+      normalizedPath === ROUTE_PATHS.roulette)
   ) {
     return <LoginPage navigate={navigate} />
   }
@@ -116,7 +136,23 @@ export function getRouteElement(pathname, navigate) {
   }
 
   if (normalizedPath === ROUTE_PATHS.myGame) {
-    return <MyGamePage navigate={navigate} />
+    return <MyGamePage navigate={navigate} hideWalletTab />
+  }
+
+  if (normalizedPath === ROUTE_PATHS.myBidding) {
+    return <MyBiddingPage navigate={navigate} />
+  }
+
+  if (normalizedPath === ROUTE_PATHS.oldRecords) {
+    return <OldRecordsPage navigate={navigate} />
+  }
+
+  if (normalizedPath === ROUTE_PATHS.myWins) {
+    return <MyWinsPage navigate={navigate} />
+  }
+
+  if (normalizedPath === ROUTE_PATHS.statement) {
+    return <StatementPage navigate={navigate} />
   }
 
   if (normalizedPath === ROUTE_PATHS.profile) {
@@ -149,6 +185,10 @@ export function getRouteElement(pathname, navigate) {
 
   if (normalizedPath === ROUTE_PATHS.notification) {
     return <NotificationPage navigate={navigate} />
+  }
+
+  if (normalizedPath === ROUTE_PATHS.roulette) {
+    return <RoulettePage navigate={navigate} />
   }
 
   return <LoginPage navigate={navigate} />

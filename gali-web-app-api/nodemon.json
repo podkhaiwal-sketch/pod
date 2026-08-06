@@ -1,0 +1,6 @@
+{
+  "watch": ["*.js", "app"],
+  "ext": "js,mjs,cjs,json",
+  "ignore": ["node_modules", "uploads", "*.log"],
+  "exec": "node --env-file=.env server.js"
+}

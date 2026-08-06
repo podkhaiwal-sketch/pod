@@ -51,7 +51,7 @@ body {
   bottom: 0 !important;
   z-index: 999 !important;
   display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
+  grid-template-columns: repeat(var(--bottom-nav-count, 4), 1fr) !important;
 }
 p {
   margin: 0;

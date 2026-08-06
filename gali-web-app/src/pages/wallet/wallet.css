@@ -452,7 +452,7 @@
   bottom: 0;
   height: 70px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(var(--bottom-nav-count, 4), 1fr);
   background: var(--color-primary);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
