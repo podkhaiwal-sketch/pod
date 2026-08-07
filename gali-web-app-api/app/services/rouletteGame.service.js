@@ -22,7 +22,9 @@ function getConfig() {
   const spinMs = Math.min(8000, Math.max(4000, Math.floor(intervalMs * 0.25)));
   const resultMs = Math.min(4000, Math.max(2000, Math.floor(intervalMs * 0.1)));
   const bettingMs = Math.max(8000, intervalMs - spinMs - resultMs);
-  const payoutMultiplier = (POCKETS * winPercentage) / 100;
+  // Win only on the winning number: 100% => 2x that number's bet (stake + equal profit).
+  // Other numbers' bets are lost and never included in payout.
+  const payoutMultiplier = 2 * (winPercentage / 100);
   return {
     intervalMs,
     minBet,
@@ -398,6 +400,7 @@ class RouletteGameService {
     const userWins = new Map();
 
     for (const bet of bets) {
+      // Pay only the stake on the winning number (never total of all numbers).
       if (Number(bet.number) === Number(winningNumber)) {
         const payout = Math.floor(
           Number(bet.amount) * config.payoutMultiplier

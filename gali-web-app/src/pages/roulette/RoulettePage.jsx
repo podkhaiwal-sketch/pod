@@ -32,7 +32,7 @@ function RoulettePage({ navigate }) {
   const [config, setConfig] = useState({
     minBet: 10,
     maxBet: 10000,
-    payoutMultiplier: 10,
+    payoutMultiplier: 2,
     spinMs: 7000,
   })
   const [connected, setConnected] = useState(false)
@@ -86,7 +86,7 @@ function RoulettePage({ navigate }) {
   const maxWin = useMemo(() => {
     const amounts = Object.values(displayBets)
     if (!amounts.length) return 0
-    return Math.floor(Math.max(...amounts) * (config.payoutMultiplier || 10))
+    return Math.floor(Math.max(...amounts) * (config.payoutMultiplier || 2))
   }, [displayBets, config.payoutMultiplier])
 
   const bettingOpen = phase === 'betting' && !placing
